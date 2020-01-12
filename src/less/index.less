@@ -1,0 +1,197 @@
+// 方块大小
+@blockSize : 18px;
+// 舞台宽度
+@stageWidth: @blockSize * 12;
+// 舞台高度
+@stageHeight:@blockSize * 21;
+
+*{
+    margin: 0;
+    padding: 0;
+    -webkit-user-select: none; 
+    -moz-user-select: none;    
+    -khtml-user-select: none;  
+    -ms-user-select: none;    
+    /* 以下两个属性目前并未支持，写在这里为了减少风险 */
+    -o-user-select: none;
+    user-select: none;  
+}
+
+body{
+    background-image: url('../imgs/bg.png');
+
+    a{
+        text-decoration: none;
+    }
+}
+
+.dis-none{
+    display: none !important;
+}
+
+/* 活跃的方块 */
+.activeBlock{
+    width: @blockSize;
+    height: @blockSize;
+    border: 1px solid black;
+    background-color: #ccc;
+    position: absolute;
+    box-sizing: border-box;
+}
+/* 已经固定的方块 */
+.inactiveBlock{
+    background-color: #2F676F;
+    border: 1px solid black;
+    width: @blockSize;
+    height: @blockSize;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+#container{
+
+    display: flex;
+    flex-direction: column; 
+
+    #title{
+        h4{
+            color: #ccc;
+            text-align: center;
+            padding:15px 0;
+        }
+    }
+
+    #tetris_container{
+
+        display: flex;
+        justify-content: center;
+    
+        // 信息
+        .info{
+            border-radius: 8px;
+            background-color: #353535;
+            border: solid 8px #2F676F;
+            width: @blockSize * 6;
+            min-width: @blockSize * 6;
+            max-width: @blockSize * 6;
+            color: white;
+            margin-left: 5px;
+            
+            // 同时控制三个面板
+            > div{
+                > h4{
+                    text-align: center;
+                }
+                > div{
+                    position: relative;
+                    text-align: center;
+                    height: @blockSize * 4;
+                    padding-top: 10px;
+
+                    
+                }
+                
+            }
+            
+            // === //
+
+            // '下一个'面板
+            .next{
+                margin-top: @blockSize;
+                margin-left: @blockSize + 10;
+            }
+        }
+    
+    
+        // 舞台面板
+        .stage {
+            width: @stageWidth;
+            height: @stageHeight;
+            min-width: @stageWidth;
+            max-width: @stageWidth;
+            background-color: #353535;
+            border: solid 8px #2F676F;
+            border-radius: 8px;
+            position: relative;
+
+
+            // 开始按钮
+            .con-start{
+                display: block;
+                position: absolute;
+                width: 80px;
+                height: 40px;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%,-50%);
+                text-align: center;
+                line-height: 40px;   
+                border: 1px solid #353535;
+                background-color: #ccc;
+                z-index: 99;
+                font-weight: 700;
+                color: white;
+
+                &:active{
+                    background-color: #fff;
+                    color: #ccc;
+                }
+            }
+        }
+    }
+
+
+
+
+    #controller_container{
+        display: flex;
+        justify-content: space-between;
+        padding-top: 25px;
+        width: @blockSize * 6 + @stageWidth + 40;
+        margin: 0 auto;
+
+
+        button[class^='con']{
+            width: 70px;
+            height: 70px;
+            border-radius: 50%; 
+            border:none;
+            outline: none;
+            background-color: #353535;
+            border:5px solid #2F676F;
+            color: white;
+
+            &:active{
+                background-color: white;
+                color: #353535;
+            }
+        }
+        .con-space{
+            width: 100px !important;
+            height: 100px !important;
+        }
+
+
+        .left{
+            padding-top: 25px;
+        }
+
+
+        .right{
+            display: flex;
+            flex-direction: column;
+
+            .top{
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .bottom{
+                // display: flex;
+                // justify-content: center;
+            }
+        }
+    }
+    
+}
+

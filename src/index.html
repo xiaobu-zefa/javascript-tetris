@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>俄罗斯方块</title>
+</head>
+
+<body>
+    <div id="container">
+
+        <div id="title">
+            <h4>俄罗斯方块</h4>
+        </div>
+
+        <div id="tetris_container">
+            <!-- 游戏舞台 -->
+            <div class="stage">
+                <!-- 大的开始按钮 -->
+                <a class="con-start" href="javascript:;">开始</a>
+            </div>
+
+            <!-- 信息面板 -->
+            <div class="info">
+                <div class="next-panel">
+                    <h4>下一个</h4>
+                    <div class="next">
+                        <!-- <div class="activeBlock" style="left: 18px; top: 0px;"></div>
+                        <div class="activeBlock" style="left: 0px; top: 18px;"></div>
+                        <div class="activeBlock" style="left: 18px; top: 18px;"></div>
+                        <div class="activeBlock" style="left: 36px; top: 18px;"></div> -->
+                    </div>
+                </div>
+                <div class="level-panel">
+                    <h4>等级</h4>
+                    <div class="level">1</div>
+                </div>
+                <div class="score-panel">
+                    <h4>分数</h4>
+                    <div class="score">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div id="controller_container">
+            <div class="left">
+                <button class="con-space">空格</button>
+            </div>
+            <div class="right">
+                <div class="top">
+                    <button class="con-up">上</button>
+                </div>
+                <div class="bottom">
+                    <button class="con-left">左</button>
+                    <button class="con-down">下</button>
+                    <button class="con-right">右</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./js/index.js"></script>
+    <script>
+    </script>
+</body>
+
+</html>
