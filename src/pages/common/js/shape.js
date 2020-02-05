@@ -1,4 +1,4 @@
-import { STAGE_STYLE, BLOCK_SIZE, ALL_INACTIVE_BLOCKS } from './const.js';
+import { STAGE_STYLE, BLOCK_SIZE } from './const.js';
 
 import Block from './block';
 /** 
@@ -12,18 +12,18 @@ import Block from './block';
  * 6. 移除页面上代表自身的DOM元素
  * */
 export default class Shape {
-    // 对应的二维数组
-    arr;
-    // 当前形状中所有的方块
-    blocks;
-    // 当前形状的 x 偏移
-    currOffsetLeft;
-    // 当前形状的 y 偏移
-    currOffsetTop;
-    // 在哪里创建
-    stage;
+    // // 对应的二维数组
+    // arr;
+    // // 当前形状中所有的方块
+    // blocks;
+    // // 当前形状的 x 偏移
+    // currOffsetLeft;
+    // // 当前形状的 y 偏移
+    // currOffsetTop;
+    // // 在哪里创建
+    // stage;
 
-    constructor({ arr = [], offSetLeft = 0, offsetTop = 0, stage = document.body }) {
+    constructor({ arr = [], offSetLeft = 0, offsetTop = 0, stage }) {
         this.arr = arr;
         this.stage = stage;
         this.blocks = [];
@@ -38,9 +38,7 @@ export default class Shape {
         for (let i = 0; i < this.arr.length; i++) {
             for (let j = 0; j < this.arr[i].length; j++) {
                 if (this.arr[i][j] === 1) {
-                    let block = new Block({
-                        stage: this.stage,
-                    });
+                    let block = new Block(this.stage);
                     block.createSelf(j * BLOCK_SIZE + this.currOffsetLeft, i * BLOCK_SIZE + this.currOffsetTop);
                     this.blocks.push(block);
                 }
@@ -91,7 +89,7 @@ export default class Shape {
                     if (x < 0 || x >= STAGE_STYLE.width || y >= STAGE_STYLE.height) {
                         return;
                     }
-                    if (ALL_INACTIVE_BLOCKS.some(bl => {
+                    if (this.stage.data.allBlocks.some(bl => {
                         return bl.blockEle.offsetTop === y && bl.blockEle.offsetLeft === x;
                     })) {
                         return;
@@ -132,6 +130,15 @@ export default class Shape {
         }) && (canMove.right = false);
 
         return canMove;
+    }
+
+    /** 
+     * 无效形状，将形状中所有方块放入无效化方块容器
+     */
+    invalidation() {
+        this.blocks.forEach(b => {
+            this.stage.data.allBlocks.push(b);
+        });
     }
 
     /** 

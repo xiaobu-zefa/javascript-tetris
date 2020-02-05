@@ -1,0 +1,22 @@
+@import url('../common/less/common.less');
+
+// 舞台面板
+.stage {
+    width: @stageWidth;
+    height: @stageHeight;
+    min-width: @stageWidth;
+    max-width: @stageWidth;
+    background-color: #353535;
+    border: solid 8px #2F676F;
+    border-radius: 8px;
+    position: relative;
+
+    // 开始按钮
+    .start{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        z-index: 99;
+    }
+}

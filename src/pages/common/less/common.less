@@ -1,0 +1,50 @@
+// 方块大小
+@blockSize : 18px;
+// 舞台宽度
+@stageWidth: @blockSize * 12;
+// 舞台高度
+@stageHeight:@blockSize * 21;
+// 信息展示区宽度
+@infoWidth:  @blockSize * 6;
+
+
+
+.dis-none{
+    display: none !important;
+}
+
+.btn{
+    display: block;
+    width: 80px;
+    height: 40px;
+    line-height: 40px;   
+    text-align: center;
+    border: 1px solid #353535;
+    background-color: #ccc;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+
+    &:active{
+        background-color: #fff;
+        color: #ccc;
+    }
+}
+
+.activeBlock{
+    width: @blockSize;
+    height: @blockSize;
+    border: 1px solid black;
+    background-color: #ccc;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.inactiveBlock{
+    background-color: #2F676F;
+    border: 1px solid black;
+    width: @blockSize;
+    height: @blockSize;
+    position: absolute;
+    box-sizing: border-box;
+}

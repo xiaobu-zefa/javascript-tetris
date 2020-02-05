@@ -1,4 +1,4 @@
-import { STAGE_STYLE, STAGE, BLOCK_SIZE, ALL_INACTIVE_BLOCKS } from './const.js';
+import { STAGE_STYLE, BLOCK_SIZE } from './const.js';
 /**
  * 代表一个小方块
  * 一个小方块能干的事情:
@@ -9,12 +9,12 @@ import { STAGE_STYLE, STAGE, BLOCK_SIZE, ALL_INACTIVE_BLOCKS } from './const.js'
  * 4. 从页面上将自身的DOM元素删除
  */
 export default class Block {
-    // 维护的DOM元素
-    blockEle;
-    // 父元素，在此父元素中创建小方块
-    stage;
+    // // 维护的DOM元素
+    // blockEle;
+    // // 父元素，在此父元素中创建小方块
+    // stage;
 
-    constructor({ stage = document.body }) {
+    constructor(stage) {
         this.stage = stage;
     }
 
@@ -28,7 +28,7 @@ export default class Block {
         this.changeStyle('activeBlock');
         this.blockEle.style.left = x + 'px';
         this.blockEle.style.top = y + 'px';
-        this.stage.appendChild(this.blockEle);
+        this.stage.data.ele.appendChild(this.blockEle);
         this.blockStyle = window.getComputedStyle(this.blockEle);
     }
 
@@ -42,7 +42,7 @@ export default class Block {
 
     /** 在画布上删除方块，也就是删除自身 */
     removeSelf() {
-        this.stage.removeChild(this.blockEle);
+        this.stage.data.ele.removeChild(this.blockEle);
     }
 
     /** 向下移动 */
@@ -78,21 +78,21 @@ export default class Block {
         // 遍历所有已经固定的方块，如果存在一个方块 block，block的左偏移x和当前方块的左偏移相同，
         // 并且block的上偏移 - 方块宽度 = 当前方块的上偏移
         // 那么当前方块就不能往下移动了
-        if (this.blockEle.offsetTop >= STAGE_STYLE.height - BLOCK_SIZE || ALL_INACTIVE_BLOCKS.some(bl => {
+        if (this.blockEle.offsetTop >= STAGE_STYLE.height - BLOCK_SIZE || this.stage.data.allBlocks.some(bl => {
             return bl.blockEle.offsetLeft === this.blockEle.offsetLeft && bl.blockEle.offsetTop - this.blockEle.offsetTop === BLOCK_SIZE;
         })) {
             canMove.down = false;
         }
         // 不能向左移动了
         // 原理同上
-        if (this.blockEle.offsetLeft <= 0 || ALL_INACTIVE_BLOCKS.some(bl => {
+        if (this.blockEle.offsetLeft <= 0 || this.stage.data.allBlocks.some(bl => {
             return bl.blockEle.offsetTop === this.blockEle.offsetTop && this.blockEle.offsetLeft - bl.blockEle.offsetLeft === BLOCK_SIZE;
         })) {
             canMove.left = false;
         }
         // 不能向右移动了
         // 原理同上
-        if (this.blockEle.offsetLeft >= STAGE_STYLE.width - BLOCK_SIZE || ALL_INACTIVE_BLOCKS.some(bl => {
+        if (this.blockEle.offsetLeft >= STAGE_STYLE.width - BLOCK_SIZE || this.stage.data.allBlocks.some(bl => {
             return bl.blockEle.offsetTop === this.blockEle.offsetTop && bl.blockEle.offsetLeft - this.blockEle.offsetLeft === BLOCK_SIZE;
         })) {
             canMove.right = false;

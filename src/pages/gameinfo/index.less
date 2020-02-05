@@ -1,0 +1,33 @@
+@import url('../common/less/common.less');
+
+.info{
+    background-color: #353535;
+    width: @infoWidth;
+    min-width: @infoWidth;
+    max-height: @stageHeight;
+    margin-left: 5px;
+    border: solid 8px #2F676F;
+    border-radius: 8px;
+    
+    .area{
+        color: #fff;
+        .title {
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 15px;
+        }
+        .con {
+            text-align: center;
+            height: @blockSize * 4;
+        }
+    }
+
+    .area.next .con{
+        position: relative;   
+    }
+
+    .area:nth-child(n+2){
+        color: #fff;
+        height: 60px;
+    }
+}

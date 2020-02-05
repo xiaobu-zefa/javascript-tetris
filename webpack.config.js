@@ -1,66 +1,56 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('Mini-css-extract-plugin');
 
 module.exports = {
     entry: {
-        index: __dirname + '/src/js/index.js',
+        index: path.join(__dirname, 'src/index.js'),
     },
     output: {
-        path: path.resolve(__dirname, './dist'),
-        filename: 'js/[name].js',
+        path: path.join(__dirname, 'dist/'),
     },
+
     module: {
         rules: [
             {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    }
-                }
-            },
-            {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-
+                use: [MiniCssExtractPlugin.loader, 'css-loader']
             },
             {
                 test: /\.less$/,
-                use: ['style-loader', 'css-loader', 'less-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
             },
-        ]
+            {
+                test: /\.png|.ogg|.wav|.ttf|.woff2|.woff|.eot|.svg$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 10,
+                        }
+                    }
+                ]
+            },
+        ],
     },
 
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'src/index.html'),
+            filename: 'index.html',
+            inject: true,
+            hash: true,
+            title: '俄罗斯方块',
+            chunks: ['index'],
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+        }),
+    ],
 
     devServer: {
         port: 5500,
         open: true,
-        writeToDisk: true,
+        hot: true,
     },
-
-
-    plugins: [
-        // 拷贝静态文件到发布目录
-        new CopyWebpackPlugin([
-            {
-                from: path.resolve(__dirname, 'src/*.html'),
-                to: path.resolve(__dirname, 'dist/[name].[ext]'),
-                toType: 'template',
-            },
-            {
-                from: path.resolve(__dirname, 'src/audio'),
-                to: path.resolve(__dirname, 'dist/audio/[name].[ext]'),
-                toType: 'template',
-            },
-            {
-                from: path.resolve(__dirname, 'src/imgs'),
-                to: path.resolve(__dirname, 'dist/imgs/[name].[ext]'),
-                toType: 'template',
-            },
-        ]),
-    ]
 };
