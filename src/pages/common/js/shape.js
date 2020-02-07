@@ -138,6 +138,7 @@ export default class Shape {
     invalidation() {
         this.blocks.forEach(b => {
             this.stage.data.allBlocks.push(b);
+            b.blockEle.className = 'inactiveBlock';
         });
     }
 

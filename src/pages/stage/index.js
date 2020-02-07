@@ -11,7 +11,7 @@ export const stage = {
         ele: document.querySelector('.stage'),  // dom 元素
         allBlocks: [],                          // 存放已经固定的方块
         tmpBlocks: [],                          // 存放临时方块
-        allLines: 0,                            // 总消除行数
+        allLines: 10,                            // 总消除行数
         currentShape: null,                     // 当前形状
         btn_start: null,                        // 开始按钮
         controller: null,                       // 控制器
@@ -107,23 +107,22 @@ export const stage = {
         }
         // 计入总消除行数
         this.data.allLines += line;
-        let tmplevel = this.data.allLines / 10;
+        let tmplevel = parseInt(this.data.allLines / 10);
         if (tmplevel < 1) tmplevel = 1;
         if (tmplevel > 10) tmplevel = 10;
-        console.log(this.data.allLines);
         level.changeLevel(tmplevel);
         // 加分
         if (line === 1) {
-            score.addScore(10);
+            score.addScore(10 * level.data.level);
         }
         else if (line === 2) {
-            score.addScore(30);
+            score.addScore(30 * level.data.level);
         }
         else if (line === 3) {
-            score.addScore(60);
+            score.addScore(60 * level.data.level);
         }
         else if (line === 4) {
-            score.addScore(100);
+            score.addScore(100 * level.data.level);
         }
     },
 

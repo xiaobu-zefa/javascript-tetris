@@ -1,6 +1,6 @@
 import './index.less';
 import 'font-awesome/css/font-awesome.min.css';
-import { INFO_STYLE } from '../common/js/const';
+import { INFO_STYLE, BLOCK_SIZE } from '../common/js/const';
 import { audio } from '../common/js/audio';
 import Utils from '../common/js/utils';
 import Shape from '../common/js/shape';
@@ -29,10 +29,34 @@ export const next = {
         }
         this.data.shape = new Shape({
             stage: this,
-            offSetLeft: INFO_STYLE.width / 2,
             arr: this.data.nextShape,
         });
         this.data.shape.createSelf();
+        // 调整位置
+        // x 轴上最多的方块数量
+        let xMaxSum = 0;
+        // 左边空白了几个格
+        let spaceSum = 0;
+        for (let i = 0; i < this.data.shape.arr.length; i++) {
+            for (let j = 0; j < this.data.shape.arr.length; j++) {
+
+                if (this.data.shape.arr[j][i] === 1) {
+                    xMaxSum++;
+                    break;
+                }
+                else if (xMaxSum === 0 && j === this.data.shape.arr[i].length) {
+                    spaceSum++;
+                }
+            }
+        }
+
+        let shapeWidth = xMaxSum * BLOCK_SIZE;
+
+        this.data.shape.blocks.forEach(b => {
+            let offLeft = parseInt(INFO_STYLE.width - shapeWidth) / 2 - (spaceSum * BLOCK_SIZE);
+            b.blockEle.style.left = `${parseInt(b.blockStyle.left) + offLeft}px`;
+        });
+
     }
 };
 
@@ -62,7 +86,6 @@ export const level = {
         this.changeLevel(1);
     },
     changeLevel(level) {
-        console.log(level);
         this.data.time = 1100 - level * 100;
         this.data.ele.innerHTML = level;
     }
@@ -78,7 +101,6 @@ export const operation = {
     },
     bindEvent() {
         this.data.ele_audio.onclick = () => {
-            console.log('audio click');
             if (this.data.status) {
                 audio.close();
                 this.data.status = false;
