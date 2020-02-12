@@ -1,6 +1,7 @@
 import { STAGE_STYLE, BLOCK_SIZE } from './const.js';
 
 import Block from './block';
+import { resolve } from 'url';
 /** 
  * 形状，接收一个二维数组，将内容为1的部分进行填充小方块，形成形状 
  * 形状能干的事情:
@@ -50,16 +51,6 @@ export default class Shape {
     removeSelf() {
         this.blocks.forEach(e => {
             e.removeSelf();
-        });
-    }
-
-    /** 
-     * 改变形状的样式
-     * 实际上是当前形状的所有方块改变样式
-     */
-    changeStyle(style) {
-        this.blocks.forEach(bl => {
-            bl.blockEle.className = style;
         });
     }
 
@@ -140,6 +131,7 @@ export default class Shape {
             this.stage.data.allBlocks.push(b);
             b.blockEle.className = 'inactiveBlock';
         });
+        clearInterval(this.timer);
     }
 
     /** 
@@ -179,6 +171,25 @@ export default class Shape {
         while (this.canMove().down) {
             this.moveDown();
         }
+    }
+
+    /** 开启自动往下掉落 */
+    autoMoveDownOn(interval) {
+        return new Promise((resolve) => {
+            this.timer = setInterval(() => {
+                if (this.canMove().down) {
+                    this.moveDown();
+                }
+                else {
+                    resolve();
+                }
+            }, interval);
+        });
+    }
+
+    /** 关闭自动下落 */
+    autoMoveDownOff() {
+        clearInterval(this.timer);
     }
 
 }

@@ -9,7 +9,6 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist/'),
     },
-
     module: {
         rules: [
             {
@@ -42,6 +41,7 @@ module.exports = {
             hash: true,
             title: '俄罗斯方块',
             chunks: ['index'],
+            favicon: './src/favicon.ico',
         }),
         new MiniCssExtractPlugin({
             filename: '[name].css',

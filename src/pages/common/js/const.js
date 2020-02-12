@@ -1,5 +1,7 @@
 /** 定义公共变量 */
 
+export const MAX_SCORE = 'max-score';
+
 // 定义按键
 export const KEY_UP = 38;
 export const KEY_DOWN = 40;

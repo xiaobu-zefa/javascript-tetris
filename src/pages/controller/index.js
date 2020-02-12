@@ -16,7 +16,15 @@ export default class controller {
 
     init() {
         this.bindEvent();
-
+        document.ontouchstart = (e) => {
+            this.startY = e.touches[0].pageY;
+        };
+        document.ontouchend = (e) => {
+            this.endY = e.changedTouches[0].pageY;
+            if (this.endY - this.startY > 20) {
+                this.ele_btn_space.click();
+            }
+        };
         document.onkeydown = (e) => {
             switch (e.keyCode) {
                 case KEY_UP: {
@@ -48,7 +56,7 @@ export default class controller {
         this.ele_btn_space.onclick = () => {
             this.stage.data.currentShape.fastDown();
             this.stage.shake();
-            this.stage.inactive();
+            this.stage.invalidation();
             audio.data.BOTTOM.play();
         };
         this.ele_btn_up.onclick = () => {

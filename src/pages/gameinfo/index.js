@@ -1,6 +1,6 @@
 import './index.less';
 import 'font-awesome/css/font-awesome.min.css';
-import { INFO_STYLE, BLOCK_SIZE } from '../common/js/const';
+import { INFO_STYLE, BLOCK_SIZE, MAX_SCORE } from '../common/js/const';
 import { audio } from '../common/js/audio';
 import Utils from '../common/js/utils';
 import Shape from '../common/js/shape';
@@ -74,6 +74,16 @@ export const score = {
         this.data.score += score;
         this.data.ele.innerHTML = this.data.score;
     },
+    // 更新最高分
+    updateMaxScore() {
+        let maxScore = localStorage.getItem(MAX_SCORE);
+        if (!maxScore) {
+            localStorage.setItem(MAX_SCORE, 0);
+        }
+        if (this.data.score > maxScore) {
+            localStorage.setItem(MAX_SCORE, this.data.score);
+        }
+    }
 };
 
 export const level = {

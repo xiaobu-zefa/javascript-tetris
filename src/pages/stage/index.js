@@ -2,7 +2,6 @@ import './index.less';
 import { BLOCK_SIZE, X_SUM, Y_SUM, STAGE_STYLE } from '../common/js/const';
 import { next, score, level } from '../gameinfo';
 import { audio } from '../common/js/audio';
-import Controller from '../controller';
 import Shape from '../common/js/shape';
 import Block from '../common/js/block';
 
@@ -11,15 +10,15 @@ export const stage = {
         ele: document.querySelector('.stage'),  // dom 元素
         allBlocks: [],                          // 存放已经固定的方块
         tmpBlocks: [],                          // 存放临时方块
-        allLines: 10,                            // 总消除行数
+        allLines: 10,                           // 总消除行数
         currentShape: null,                     // 当前形状
         btn_start: null,                        // 开始按钮
         controller: null,                       // 控制器
     },
 
-    init() {
+    init(controller) {
         this.bindEvent();
-        this.data.controller = new Controller(this);
+        this.data.controller = controller;
     },
 
     bindEvent() {
@@ -33,12 +32,12 @@ export const stage = {
             next.init();
             score.init();
             level.init();
-            this.runGame();
+            this.run();
         }
     },
 
-    // 运行游戏
-    runGame() {
+    // 运行
+    run() {
         let shapeArr = next.renderNextShape();
         this.data.currentShape = new Shape({
             arr: shapeArr,
@@ -46,31 +45,25 @@ export const stage = {
             stage: this,
         });
         this.data.currentShape.createSelf();
-        if (!this.end()) {
-            this.data.currentShape.timer = setInterval(() => {
-                if (this.data.currentShape.canMove().down) {
-                    this.data.currentShape.moveDown();
-                }
-                else {
-                    this.inactive();
-                }
-            }, level.data.time);
+        if (this.canEnd()) {
+            this.end();
         }
         else {
-            this.data.currentShape.removeSelf();
+            this.data.currentShape.autoMoveDownOn(level.data.time).then(() => {
+                this.invalidation();
+            });
         }
     },
 
     // 方块落下后要干的事情
-    inactive() {
+    invalidation() {
         this.data.currentShape.invalidation();
-        clearInterval(this.data.currentShape.timer);
-        this.clearBlocks();
-        this.runGame();
+        this.clearLine();
+        this.run();
     },
 
     // 消除方块
-    clearBlocks() {
+    clearLine() {
         let line = 0;
         for (let j = Y_SUM; j >= 0; j--) {
             let tmpBlocksIndex = [];
@@ -128,31 +121,29 @@ export const stage = {
 
     // 游戏结束
     end() {
-        if (
-            this.data.currentShape.blocks.some(block => {
-                return this.data.allBlocks.some(bl => {
-                    return parseInt(block.blockEle.style.top) === parseInt(bl.blockEle.style.top) && parseInt(block.blockEle.style.left) === parseInt(bl.blockEle.style.left);
-                });
-            })
-        ) {
-
-
-            this.data.allBlocks.forEach(b => {
-                b.removeSelf();
-            });
-            this.data.allBlocks = [];
-            this.data.controller.distory();
-            this.endAnimation().then(() => {
-                this.data.btn_start.classList.remove('dis-none');
-                this.data.btn_start.innerHTML = '重新开始';
-            });
-            return true;
-
-        }
-        return false;
+        score.updateMaxScore();
+        this.data.currentShape.removeSelf();
+        this.data.allBlocks.forEach(b => {
+            b.removeSelf();
+        });
+        this.data.allBlocks = [];
+        this.data.controller.distory();
+        this.endAnimation().then(() => {
+            this.data.btn_start.classList.remove('dis-none');
+            this.data.btn_start.innerHTML = '重新开始';
+        });
     },
 
-    // 急速下落后，画面震动效果
+    // 游戏是否能结束
+    canEnd() {
+        return this.data.currentShape.blocks.some(b => {
+            return this.data.allBlocks.some(b2 => {
+                return parseInt(b.blockEle.style.top) === parseInt(b2.blockEle.style.top) && parseInt(b.blockEle.style.left) === parseInt(b2.blockEle.style.left);
+            });
+        });
+    },
+
+    // 画面震动效果
     shake() {
         this.data.ele.style.top = `${parseInt(getComputedStyle(this.data.ele).top) + 5}px`;
         setTimeout(() => {
